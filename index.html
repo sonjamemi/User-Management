@@ -20,7 +20,7 @@
         </tr>
     </table>
     
-<!-- The form -->
+<!-- New form -->
 <div id="popup-container">
 <div id="popup">
     <form id="form" method="post" onSubmit="validateForm()">
@@ -72,11 +72,63 @@
 </div>
 </div>
 
+<!-- Edit form -->
+<div id="popup-container-edit">
+    <div id="popup-edit">
+        <form id="form-edit" method="post" onSubmit="validateForm()">
+            <div id="form-header">
+              <h2 class="header">Edit User Info</h2>
+              <img src="images/exit.png" alt="" id="close-edit">
+            </div>
+            <hr>
+            <div id="form-container">
+                <div id="column-1">
+                   <label for="name-edit">Full Name</label><br>
+                   <input type="text" id="name-edit" placeholder="Full Name" required/>
+                   <label for="username-edit">Username</label><br>
+                   <input type="text" id="username-edit" placeholder="Username" required/>
+                   <label for="email-edit">Email</label><br>
+                   <input type="text" id="email-edit" placeholder="Email"/>
+                   <div id="email-edit-err"></div>
+                   <label for="phone-edit">Phone Number</label><br>
+                   <input type="tel" id="phone-edit" placeholder="Phone Number"/>
+                   <div id="phone-edit-err"></div>
+                </div>
+                <div id="column-2">
+                    <div id="checkbox"> 
+                        <input type="checkbox" id="google-places-edit" onclick="showEditFields()">
+                        <p id="checkbox-label">Use Google Location</p>
+                    </div>
+                   <label for="address-edit">Address</label><br>
+                   <input type="text" id="address-edit" placeholder="Address"/>
+                   <label for="city-edit">City</label><br>
+                   <input type="text" id="city-edit" placeholder="City"/>
+                   <label for="zipcode-edit">Zip Code</label><br>
+                   <input type="zip" id="zipcode-edit" placeholder="Zip Code"/>
+                   <div id="coordinates">
+                      <div id="lat-edit-div">
+                           <label for="lat-edit">Latitude</label><br><br>
+                           <input type="text" id="lat-edit" placeholder="Latitude"/>
+                      </div>
+                      <div id="lng-edit-div">
+                           <label for="lng-edit">Longitude</label><br><br>
+                           <input type="text" id="lng-edit" placeholder="Longitude"/>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div id="submit-btn">
+                <button type="submit" id="save" class="blue-btn">Save</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
 <script src="index.js"></script>
 
-<!-- <script async
+<script async 
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEfsRak7L2DkOoHqkbwPpYusnlSFI0zoc&libraries=places&callback=initMap">
-</script> -->
+</script> 
 
 </body>
 </html>

@@ -73,9 +73,9 @@ td{
     /* width: 10%; */
 }
 
-#td-icons{
+/* #td-icons{
     /* width: 10%; */
-}
+/* } */
 
 #ids{
     padding-left: 20px;
@@ -99,7 +99,7 @@ float: right;
 }
 
 /* pop up form */
-#popup-container{
+#popup-container, #popup-container-edit{
     position: fixed;
     top: 0;
     left: 0;
@@ -112,7 +112,7 @@ float: right;
     justify-content: center;
 }
 
-#popup{
+#popup, #popup-edit{
     display:none;
     background: white;
     /* width: 90vw; */
@@ -150,11 +150,11 @@ input:focus{
     color: #4E5964;
 }
 
-#email-err, #phone-err{
+#email-err, #phone-err, #email-edit-err, #phone-edit-err{
     color: red;
 }
 
-#close{
+#close, #close-edit{
     /* position: relative; */
     /* right: 0; */
     /* top: 0; */
@@ -210,11 +210,11 @@ input:focus{
     margin-top: 20px;
 }
 
-#lat-div, #lng-div{
+#lat-div, #lng-div, #lat-edit-div, #lng-edit-div{
     display: none;
 }
 
-#lat,#lng{
+#lat, #lng, #lat-edit, #lng-edit{
     display: none;
     width: 100px;
     height: 30px;
@@ -238,7 +238,7 @@ label{
     margin-top: 5px;
 }
 
-#google-places{
+#google-places, #google-places-edit{
     width: 15px;
     height: 15px;
     border-radius: 3px;

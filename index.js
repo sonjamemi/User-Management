@@ -6,7 +6,6 @@ const closeEl=document.getElementById("close")
 const editEl=document.getElementById("edit")
 const formEl=document.getElementById("form")
 const saveEl=document.getElementById("save")
-
 const nameEl=document.getElementById("name")
 const emailEl=document.getElementById("email")
 const phoneEl=document.getElementById("phone")
@@ -18,13 +17,31 @@ const latEl=document.getElementById("lat")
 const lngEl=document.getElementById("lng")
 
 const locationEl=document.getElementById("google-places")
-
 const latDivEl=document.getElementById("lat-div")
 const lngDivEl=document.getElementById("lng-div")
 
-const tableName= document.getElementById("data-name")
-const tableEmail= document.getElementById("data-email")
-const tablePhone= document.getElementById("data-phone")
+// const tableName= document.getElementById("data-name")
+// const tableEmail= document.getElementById("data-email")
+// const tablePhone= document.getElementById("data-phone")
+
+//////
+
+const popupContainerEditEl=document.getElementById("popup-container-edit")
+const popupEditEl=document.getElementById("popup-edit")
+const closeEditEl=document.getElementById("close-edit")
+const formEditEl=document.getElementById("form-edit")
+const nameEditEl=document.getElementById("name-edit")
+const emailEditEl=document.getElementById("email-edit")
+const phoneEditEl=document.getElementById("phone-edit")
+const usernameEditEl=document.getElementById("username-edit")
+const addressEditEl=document.getElementById("address-edit")
+const cityEditEl=document.getElementById("city-edit")
+const zipcodeEditEl=document.getElementById("zipcode-edit")
+const latEditEl=document.getElementById("lat-edit")
+const lngEditEl=document.getElementById("lng-edit")
+const locationEditEl=document.getElementById("google-places-edit")
+const latEditDivEl=document.getElementById("lat-edit-div")
+const lngEditDivEl=document.getElementById("lng-edit-div")
 
 let rowId=0;
 
@@ -41,7 +58,7 @@ const displayUsers = async ()=>{
         <td>${data[i].phone}</td>
         <td id="td-icons">
         <div id="icons">
-        <img src="images/edit_icon.png" id="edit" onclick="openForm()" alt="">
+        <img src="images/edit_icon.png" id="edit" onclick="editUserModal(${data[i].id})" alt="">
         <img src="images/delete_icon.png" onclick="deleteUser(${data[i].id})" id="delete" alt="">
         </div>
         </td>
@@ -102,22 +119,18 @@ const addUser = async() =>{
 //update user
 const editUser = (id) =>{
 
-  const parent = e.target.parentElement
-  let nameContent=parent.querySelector('name').textContent
-  nameEl.value = nameContent
-
     const res = fetch(`http://localhost:8008/users/${id}`,{
-          method: "PUT",
+          method: "PATCH",
           body:JSON.stringify({
-            name: nameEl.value,
-            email: emailEl.value,
-            phone: phoneEl.value,
-            username: usernameEl.value,
-            address: addressEl.value,
-            city: cityEl.value,
-            zicode: zipcodeEl.value,
-            lat: latEl.value,
-            lng: lngEl.value
+            name: nameEditEl.value,
+            email: emailEditEl.value,
+            phone: phoneEditEl.value,
+            username: usernameEditEl.value,
+            address: addressEditEl.value,
+            city: cityEditEl.value,
+            zicode: zipcodeEditEl.value,
+            lat: latEditEl.value,
+            lng: lngEditEl.value
           }),
           headers:{
                 'Content-type': 'application/json; charset=UTF-8',
@@ -125,24 +138,24 @@ const editUser = (id) =>{
     })     
 }
 
-//prevent autosubmission 
+//prevent add user autosubmission form 
 formEl.addEventListener('submit', (e)=>{
   e.preventDefault()
   validateForm()
 })
 
-// //open popup for edit User
-// const editUserModal = (id) =>{
-//   popupContainerEl.style.display="flex"
-//   popupEl.style.display="flex"
-//   rowId = id
-// }
+//prevent edit user autosubmission form
+formEditEl.addEventListener('submit', (e)=>{
+  e.preventDefault()
+  editUser(rowId)
+})
 
-// //Close popup btn on Edit User form
-// closeModalEditBtn.addEventListener("click", ()=>{
-//   modalContainerEditUserEl.style.display="none"
-//   modalEditUserEl.style.display="none"
-// })
+//open popup for edit User
+const editUserModal = (id) =>{
+  popupContainerEditEl.style.display="flex"
+  popupEditEl.style.display="flex"
+  rowId = id
+}
 
 //open popup
 const openForm=()=>{
@@ -156,7 +169,12 @@ closeEl.addEventListener("click", ()=>{
     popupEl.style.display="none"
 })
 
-//show latitude and longitude
+closeEditEl.addEventListener("click", ()=>{
+  popupContainerEditEl.style.display="none"
+  popupEditEl.style.display="none"
+})
+
+//show latitude and longitude add user form 
 const showFields = ()=>{
 if (locationEl.checked) {
     latDivEl.style.display = 'block'
@@ -170,6 +188,23 @@ if (locationEl.checked) {
     lngEl.style.display="none"
   }
 }
+
+//show latitude and longitude edit user form 
+const showEditFields = ()=>{
+  if (locationEditEl.checked) {
+      latEditDivEl.style.display = 'block'
+      latEditEl.style.display="block"
+      lngEditDivEl.style.display = 'block'
+      lngEditEl.style.display="block"
+    } else {
+      latEditDivEl.style.display = 'none'
+      latEditEl.style.display="none"
+      lngEditDivEl.style.display ="none"
+      lngEditEl.style.display="none"
+    }
+  }
+
+// ADD USER FORM VALIDATION
 
 //email address validation
 const emailValidation = ()=>{
@@ -237,7 +272,7 @@ const validateForm = ()=>{
   }
 }
 
-//submit form if validateForm() returns true
+//submit form if validateForm() returns 
 saveEl.addEventListener("click", ()=>{
   validateForm()
 
@@ -246,11 +281,89 @@ saveEl.addEventListener("click", ()=>{
   }
   })
 
-// //Google Places API autocomplete 
-// autocomplete = new google.maps.places.Autocomplete(document.getElementById("address"),
-// {
-//   componentRestrictions: {'country': ['us']},
-//   fields: ['geometry', 'name'],
-//   types: ['establishment']
-// }
-// )
+// EDIT USER 
+
+//phone number validation
+const phoneEditValidation = ()=>{
+
+  const phoneEditValue=phoneEditEl.value.trim(); 
+  const validPhoneNumber=/^[0-9]*$/;
+  const phoneEditErrEl=document.getElementById('phone-edit-err');
+
+  if(phoneEditValue=="")
+  {
+   phoneEditErrEl.innerHTML="Phone number is required!";
+   phoneEditEl.style.borderColor = "red";
+  }else if(!validPhoneNumber.test(phoneEditValue)){
+    phoneEditErrEl.innerHTML="Please enter a valid phone number!";
+    phoneEditEl.style.borderColor = "red";
+  }else if(phoneEditValue.length!=10){
+    phoneEditErrEl.innerHTML="Phone number should have 10 digits!";
+    phoneEditEl.style.borderColor = "red";
+  }
+  else{
+    phoneEditErrEl.innerHTML="";
+    return true;
+  }
+
+}
+phoneEditEl.oninput= ()=>{
+phoneEditValidation();
+}
+
+//email address validation
+const emailEditValidation = ()=>{
+
+  const emailEditElValue=emailEditEl.value.trim(); 
+  const validEmailAddress=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const emailEditErrEl=document.getElementById('email-edit-err');
+
+  if(emailEditElValue=="")
+  {
+   emailEditErrEl.innerHTML="Email address is required!";
+   emailEditEl.style.borderColor = "red";
+
+  }else if(!validEmailAddress.test(emailEditElValue)){
+    emailEditErrEl.innerHTML="Please enter a valid email address!";
+    emailEditEl.style.borderColor = "red";
+  }else{
+    emailEditErrEl.innerHTML="";
+    return true;
+  }
+}
+emailEditEl.oninput = ()=>{
+emailEditValidation();
+}
+
+//validate form
+const validateEditForm = ()=>{
+  
+  emailEditValidation();
+  phoneEditValidation();
+  
+  if(emailEditValidation() == true && 
+    phoneEditalidation()==true){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+//submit form if validateEditForm() returns 
+saveEl.addEventListener("click", ()=>{
+  validateEditForm()
+
+  if(validateEditForm() == true){
+    editUser(rowId)
+  }
+  })
+
+//Google Places API autocomplete 
+const initMap = ()=>{
+autocomplete = new google.maps.places.Autocomplete(document.getElementById("address"),
+{
+  componentRestrictions: {'country': ['us']},
+  fields: ['geometry', 'name'],
+  types: ['establishment']
+}
+)}
