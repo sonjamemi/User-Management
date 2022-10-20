@@ -15,16 +15,9 @@ const cityEl=document.getElementById("city")
 const zipcodeEl=document.getElementById("zipcode")
 const latEl=document.getElementById("lat")
 const lngEl=document.getElementById("lng")
-
 const locationEl=document.getElementById("google-places")
 const latDivEl=document.getElementById("lat-div")
 const lngDivEl=document.getElementById("lng-div")
-
-// const tableName= document.getElementById("data-name")
-// const tableEmail= document.getElementById("data-email")
-// const tablePhone= document.getElementById("data-phone")
-
-//////
 
 const popupContainerEditEl=document.getElementById("popup-container-edit")
 const popupEditEl=document.getElementById("popup-edit")
@@ -71,12 +64,9 @@ displayUsers()
 
 //delete a user
 const deleteUser = async (id) =>{
-    const res = await fetch('http://localhost:8008/users/'+id,{
-        method: 'DELETE',
+      fetch('http://localhost:8008/users/'+id,{
+      method: 'DELETE',
       })
-      const data = await res.json()
-    //   console.log("ID SELECTED: ", id)
-    //   console.log("DATA RETURNED ON DELETE: ", data)
 }
 
 //Create new user
@@ -97,23 +87,7 @@ const addUser = async() =>{
           headers:{
                 'Content-type': 'application/json; charset=UTF-8',
           }
-    })
-    // const data = await res.json()
-    // console.log(data)
-    // userEl.innerHTML +=`
-    // <tr>
-    // <td>${data.id}</td>
-    // <td id="data-name">${data.name}</td>
-    // <td id="data-email">${data.email}</td>
-    // <td id="data-phone">${data.phone}</td>
-    // <td>
-    // <div id="icons">
-    // <img src="images/edit_icon.png" alt="">
-    // <img src="images/delete_icon.png" onclick="deleteUser(${data[i].id})" alt="">
-    // </div>
-    // </td>
-    // </tr>
-    // `        
+    })     
 }
 
 //update user
@@ -359,11 +333,69 @@ saveEl.addEventListener("click", ()=>{
   })
 
 //Google Places API autocomplete 
-const initMap = ()=>{
-autocomplete = new google.maps.places.Autocomplete(document.getElementById("address"),
+
+function initMap(){
+  autocomplete = new google.maps.places.Autocomplete(document.getElementById("address"),
+  {
+    componentRestrictions: {'country': ['us']},
+    fields: ['geometry', 'name'],
+    types: ['establishment']
+  }
+  
+  )
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+
+    let place = autocomplete.getPlace();
+    latEl.value = place.geometry.location.lat()
+    lngEl.value = place.geometry.location.lng()
+
+    let address = place.formatted_address;
+    let latitude = place.geometry.location.lat();
+    let longitude = place.geometry.location.lng();
+    let latlng = new google.maps.LatLng(latitude, longitude);
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+            let address = results[0].formatted_address;
+            let pin = results[0].address_components[results[0].address_components.length - 1].long_name;
+            let city = results[0].address_components[results[0].address_components.length - 4].long_name;
+            cityEl.value = city;
+            zipcodeEl.value = pin;
+        }
+    }
+});
+});
+
+autocomplete = new google.maps.places.Autocomplete(document.getElementById("address-edit"),
 {
   componentRestrictions: {'country': ['us']},
   fields: ['geometry', 'name'],
   types: ['establishment']
 }
-)}
+
+)
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+
+    let place = autocomplete.getPlace();
+    latEditEl.value = place.geometry.location.lat()
+    lngEditEl.value = place.geometry.location.lng()
+
+    let address = place.formatted_address;
+    let latitude = place.geometry.location.lat();
+    let longitude = place.geometry.location.lng();
+    let latlng = new google.maps.LatLng(latitude, longitude);
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+          let address = results[0].formatted_address;
+          let pin = results[0].address_components[results[0].address_components.length - 1].long_name;
+          let city = results[0].address_components[results[0].address_components.length - 4].long_name;
+          cityEditEl.value = city;
+          zipcodeEditEl.value = pin;
+          }
+        }
+      });
+    });
+}
