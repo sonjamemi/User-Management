@@ -335,7 +335,7 @@ saveEl.addEventListener("click", ()=>{
 //Google Places API autocomplete 
 
 function initMap(){
-  autocomplete = new google.maps.places.Autocomplete(document.getElementById("address"),
+  autocompleted = new google.maps.places.Autocomplete(document.getElementById("address"),
   {
     componentRestrictions: {'country': ['us']},
     fields: ['geometry', 'name'],
@@ -343,9 +343,9 @@ function initMap(){
   }
   
   )
-  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+  google.maps.event.addListener(autocompleted, 'place_changed', function () {
 
-    let place = autocomplete.getPlace();
+    let place = autocompleted.getPlace();
     latEl.value = place.geometry.location.lat()
     lngEl.value = place.geometry.location.lng()
 
